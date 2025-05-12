@@ -1,0 +1,19 @@
+steps:
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['build', '-t', 'asia.gcr.io/$PROJECT_ID/my-gin-api', '.']
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', 'asia.gcr.io/$PROJECT_ID/my-gin-api']
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: gcloud
+    args:
+      - 'run'
+      - 'deploy'
+      - 'my-gin-api'
+      - '--image'
+      - 'asia.gcr.io/$PROJECT_ID/my-gin-api'
+      - '--region'
+      - 'asia-east1' # Change to your preferred region
+      - '--platform'
+      - 'managed'
+      - '--allow-unauthenticated'
+images: ['asia.gcr.io/$PROJECT_ID/my-gin-api']
